@@ -1,25 +1,28 @@
-local function applySafeBoost(humanoid, baseSpeed, maxSpeed)
-  if not humanoid:IsA("Humanoid") then
-    return -- Exit if not a Humanoid
-  end
+local intens = 600 -- set speed boost
+local boostActive = true
 
-  local seatPart = humanoid.SeatPart
-  local currentSpeed = humanoid.MoveDirection.Magnitude
-
-  local targetSpeed = math.min(currentSpeed + baseSpeed, maxSpeed) -- Limit speed increase with maxSpeed
-
-  if seatPart then
-    seatPart:ApplyImpulse(seatPart.CFrame.LookVector * Vector3.new(0, 0, targetSpeed - currentSpeed))
-  else
-    humanoid:ApplyImpulse(humanoid.CFrame.LookVector * Vector3.new(0, 0, targetSpeed - currentSpeed))
-  end
+local function applyImpulseToHumanoid(Humanoid, intens)
+    if Humanoid:IsA("Humanoid") and Humanoid.SeatPart then
+        Humanoid.SeatPart:ApplyImpulse(Humanoid.SeatPart.CFrame.LookVector * Vector3.new(0, 0, intens))
+    elseif Humanoid:IsA("BasePart") then
+        Humanoid:ApplyImpulse(Humanoid.CFrame.LookVector * Vector3.new(0, 0, intens))
+    end
 end
 
-local baseSpeed = 600 -- Adjust base speed for desired boost intensity
-local maxSpeed = 1000 -- Set the maximum achievable speed (consider physics and gameplay balance)
+local vehicleLoopSpeed = game:GetService("RunService").Stepped:Connect(function()
+    local localPlayer = game:GetService("Players").LocalPlayer
+    local humanoid = localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")
 
-local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        applyImpulseToHumanoid(humanoid, intens)
+    end
+end)
 
-if humanoid then
-  applySafeBoost(humanoid, baseSpeed, maxSpeed)
+while boostActive do
+    wait()
 end
+
+vehicleLoopSpeed:Disconnect()
+
+ให้สคิปทำงานทันที
+
