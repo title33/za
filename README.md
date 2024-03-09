@@ -1,4 +1,4 @@
-local intens = 600 -- set speed boost
+local intens = 1-600 -- set speed boost
 local boostActive = true
 
 local function applyImpulseToHumanoid(Humanoid, intens)
