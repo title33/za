@@ -1,25 +1,20 @@
-shoo = 999
+local shoo = 1 - 600
 
 if not boostActive then
     local LocalPlayer = game:GetService("Players").LocalPlayer
-    local intens = shoo --set speed boost
+    local intens = shoo -- set speed boost
     local Humanoid = workspace.CurrentCamera.CameraSubject
-    local direction = Humanoid.SeatPart.CFrame.LookVector
+    local boostActive = true
 
     vehicleloopspeed = game:GetService("RunService").Stepped:Connect(function()
         if Humanoid:IsA("Humanoid") then
-            if direction == Vector3.new(0, 0, 1) then
-                Humanoid.SeatPart:ApplyImpulse(Humanoid.SeatPart.CFrame.LookVector * Vector3.new(intens, 0, 0))
-            else
-                Humanoid.SeatPart:ApplyImpulse(Humanoid.SeatPart.CFrame.LookVector * Vector3.new(0, 0, 0))
-            end
+            Humanoid.SeatPart:ApplyImpulse(Humanoid.SeatPart.CFrame.LookVector * Vector3.new(0, 0, intens))
         elseif Humanoid:IsA("BasePart") then
-            if direction == Vector3.new(0, 0, 1) then
-                Humanoid:ApplyImpulse(Humanoid.CFrame.LookVector * Vector3.new(intens, 0, 0))
-            else
-                Humanoid:ApplyImpulse(Humanoid.CFrame.LookVector * Vector3.new(0, 0, 0))
-            end
+            Humanoid:ApplyImpulse(Humanoid.CFrame.LookVector * Vector3.new(0, 0, intens))
         end
     end)
-    boostActive = true
+
+    while boostActive do
+        wait()
+    end
 end
